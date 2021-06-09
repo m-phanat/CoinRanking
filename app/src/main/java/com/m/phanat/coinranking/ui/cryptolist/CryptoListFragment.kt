@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.m.phanat.coinranking.ui.base.BaseFragment
 import com.m.phanat.coinranking.R
 import com.m.phanat.coinranking.databinding.FragmentCryptoListBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
@@ -56,8 +58,8 @@ class CryptoListFragment : BaseFragment<FragmentCryptoListBinding, CryptoListVie
 
     private fun initObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.getCryptoList().observe(viewLifecycleOwner) { data ->
-                cryptoListAdapter.submitData(lifecycle,data )
+            viewModel.getCryptoList().collectLatest {
+                cryptoListAdapter.submitData(lifecycle,it)
             }
         }
     }

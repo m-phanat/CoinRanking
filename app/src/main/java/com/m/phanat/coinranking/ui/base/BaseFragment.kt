@@ -11,6 +11,7 @@ import androidx.viewbinding.ViewBinding
 
 abstract class BaseFragment<VB : ViewBinding, ViewModel : BaseViewModel> : Fragment() {
     protected abstract val viewModel: ViewModel
+
     protected lateinit var binding: VB
     protected abstract fun getViewBinding(): VB
 

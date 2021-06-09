@@ -7,7 +7,6 @@ import com.m.phanat.coinranking.data.models.ErrorJson
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -20,7 +19,7 @@ class RetrofitProvider(
     fun provide(): Retrofit {
         val client = OkHttpClient.Builder()
             .handleErrors()
-            .setLogger(HttpLoggingInterceptor.Level.BODY)
+            .setLogger(HttpLoggingInterceptor.Level.BASIC)
             .setApiKey()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
@@ -37,14 +36,10 @@ class RetrofitProvider(
     private fun Retrofit.Builder.setConverters() =
         addConverterFactory(MoshiConverterFactory.create(moshi))
 
-    private fun OkHttpClient.Builder.setLogger(
-        logLevel: HttpLoggingInterceptor.Level
-    ): OkHttpClient.Builder {
-        if (BuildConfig.DEBUG) {
-            addInterceptor(HttpLoggingInterceptor().apply {
-                level = logLevel
-            })
-        }
+    private fun OkHttpClient.Builder.setLogger(logLevel: HttpLoggingInterceptor.Level): OkHttpClient.Builder {
+        addInterceptor(HttpLoggingInterceptor().apply {
+            level = logLevel
+        })
         return this
     }
 

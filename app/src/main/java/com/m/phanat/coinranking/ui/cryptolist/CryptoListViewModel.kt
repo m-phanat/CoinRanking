@@ -1,21 +1,20 @@
 package com.m.phanat.coinranking.ui.cryptolist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.m.phanat.coinranking.data.repository.CryptoListRepository
 import com.m.phanat.coinranking.ui.base.BaseViewModel
 import com.m.phanat.coinranking.ui.models.CryptoItemResponse
+import kotlinx.coroutines.flow.Flow
 
 class CryptoListViewModel(private val repository: CryptoListRepository) : BaseViewModel() {
 
-    private val _cryptoList = MutableLiveData<PagingData<CryptoItemResponse>>()
+    private var _cryptoList: Flow<PagingData<CryptoItemResponse>>? = null
 
-    suspend fun getCryptoList(): LiveData<PagingData<CryptoItemResponse>> {
+    fun getCryptoList(): Flow<PagingData<CryptoItemResponse>> {
         val response = repository.getCryptoList().cachedIn(viewModelScope)
-        _cryptoList.value = response.value
+        _cryptoList = response
         return response
     }
 }
